@@ -194,28 +194,6 @@ GROUP BY f.id, f.name
 ORDER BY booking_rate DESC; 
 
 #16.CONTINUE Q15 -> WHICH film has rate over average?
-SELECT
-    f.id AS film_id,
-    f.name AS film_name,
-    COUNT(DISTINCT b.id) / COUNT(DISTINCT sr.id) AS booking_rate
-    
-FROM film f
-    LEFT JOIN screening sr ON f.id = sr.film_id
-    LEFT JOIN booking b ON sr.id = b.screening_id
-GROUP BY f.id, f.name
-
-HAVING
-    COUNT(DISTINCT b.id) / COUNT(DISTINCT sr.id) > (
-        SELECT AVG(booking_rate)
-        FROM (SELECT
-                f.id AS film_id,
-                f.name AS film_name,
-                COUNT(DISTINCT b.id) / COUNT(DISTINCT sr.id) AS booking_rate
-            FROM film f
-                LEFT JOIN screening sr ON f.id = sr.film_id
-                LEFT JOIN booking b ON sr.id = b.screening_id
-            GROUP BY f.id, f.name) AS avg_rates
-    );
 
 #17.TOP 2 people who enjoy the least TIME (in minutes) in the cinema based on booking info - only count who has booking info (example : Dũng book film tom&jerry 4 times -> Dũng enjoy 90 mins x 4)
 
