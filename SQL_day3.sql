@@ -17,22 +17,4 @@ FROM transfers
 GROUP BY name
 ORDER BY name;
 
--- bus
 
-WITH matching AS (
-    SELECT
-        b.id AS bus_id,
-        p.id AS pass_id,
-        FIRST_VALUE(b.id) OVER (PARTITION BY p.id ORDER BY b.time) AS first_arrived_bus
-    FROM buses b
-    LEFT JOIN passengers p ON b.destination = p.destination
-                          AND b.origin = p.origin
-                          AND b.time >= p.time
-    ORDER BY p.id
-)
-SELECT
-    bus_id AS id,
-    COUNT(CASE WHEN bus_id = first_arrived_bus THEN pass_id END) AS passengers_on_board
-FROM matching
-GROUP BY bus_id
-ORDER BY bus_id;
